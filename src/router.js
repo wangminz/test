@@ -13,7 +13,7 @@ export default new Router({
     // 个人详情页面
     {path: '/my',component: () => import('./views/My') },
      // 商品详情页面
-    {path: '/detail',component: () => import('./views/Detail') },
+    {path: '/detail/:id',component: () => import('./views/Detail') },
     // 默认页面--首页
     { path: '*',component: Home }
   ]

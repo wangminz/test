@@ -30,10 +30,15 @@
     right:0;
     width:100%;
     a {
+      &.on {
+        span {
+          color: #666;
+        }
+      }
       text-decoration: none;
-     span {
-       color:#fff;
-     }
+      span {
+        color:#fff;
+      }
     }
   }
 </style>
@@ -43,8 +48,7 @@
     methods: {
       goTo (path) {
         this.$router.replace(path);
-        
-      }, 
+      }
     }
   }
 </script>
