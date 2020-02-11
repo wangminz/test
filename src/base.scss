@@ -1,1 +1,10 @@
 $navColor: #02A774;
+// 创建三角形混合
+@mixin arrow($w: 10px, $c: #000, $dir: left) {
+	// 行内元素和块元素
+	width: 0;
+	font-size: 0;
+	border: $w solid transparent;
+	// 设置特殊边
+	border-#{$dir}-color: $c;
+}

@@ -1,4 +1,5 @@
 <template>
+<!-- footer部分 -->
   <div class="footer">
     <a :class="{on: '/home'===$route.path}" @click="goTo('/home')">
       <span>外卖</span>
@@ -22,7 +23,7 @@
     display:flex;
     justify-content: space-around;
     height:50px;
-    width: 100px;
+    width: 100px;  
     line-height: 50px;
     position: fixed;
     left:0;
@@ -46,6 +47,7 @@
 <script>
   export default {
     methods: {
+      // 页面切换
       goTo (path) {
         this.$router.replace(path);
       }
