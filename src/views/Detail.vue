@@ -1,141 +1,90 @@
 <template>
-<!-- 商品详情页 -->
+  <!-- 商品详情页 -->
   <div class="detail-page">
     <!-- 详情页头部 -->
-    <div class="detail-header">
-      <!-- 顶部背景图 -->
-      <div class="bg-top">
-        <img :src="list.bgImg" alt />
-        <a class="back" @click="$router.back()">&lt;</a>
+    <DetailHeader :list="list"></DetailHeader>
+    <!-- 导航部分 -->
+    <div class="tab">
+      <div class="tab-item">
+        <p :class="{show:true}">点餐</p>
       </div>
-      <!-- 店铺内容部分 -->
-      <div class="top-content" @click="toggleShopShow">
-		<img class="content-image" :src="list.avatar" alt="">
-		<div class="shop">
-			<h2 class="shop-title"><span class="shop-logo">品牌</span><span class="shop-name">{{list.name}}</span></h2>
-			<div class="shop-message">
-				<span class="shop-message-detail">{{list.score}}</span>
-				<span class="shop-message-detail">月售{{list.sellCount}}单</span>
-				<span class="shop-message-detail">{{list.description}}&nbsp;约{{list.deliveryTime}}分钟</span>
-				<span class="shop-message-detail">距离{{list.distance}}</span>
-			</div>
-		</div>
+      <div class="tab-item">
+        <p>评价</p>
+      </div>
+      <div class="tab-item">
+        <p>商家</p>
       </div>
     </div>
+    <ShopList :goods="data" v-show="show"></ShopList>
+    <!-- 商品列表 -->
     <!-- 购物车部分 -->
     <div class="buyCar">
       <h1>另需配送费</h1>
     </div>
   </div>
 </template>
-7
+
 <style type="text/css" lang="scss">
-// 引入样式
-@import '../base.scss';
-.detail-page {
-  .detail-header {
-	margin-top: -5px;
-	// 背景图
-    .bg-top {
-      img {
-        width: 100%;
+.tab {
+  height: 40px;
+  line-height: 40px;
+  background: #fff;
+  margin-top: 120px;
+  font-size: 20px;
+  .tab-item {
+    float: left;
+    width: 33.33333%;
+    text-align: center;
+    font-size: 14px;
+    color: rgb(77, 85, 93);
+    p {
+      display: block;
+      position: relative;
+      &.show {
+        color: #02a774;
+        &::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          bottom: 1px;
+          width: 35px;
+          height: 2px;
+          transform: translateX(-50%);
+          background: #02a774;
+        }
       }
-      .back {
-        color: #fff;
-        font-size: 30px;
-        position: relative;
-        top: -125px;
-        left: 5px;
-      }
-	}
-	// 店铺内容部分
-	.top-content {
-		padding: 30px 20px 5px 20px;
-		position: relative;
-		top: -120px;
-     	display: flex;
-		text-align: center;
-		background-color: #fff;
-		.content-image {
-        	position: absolute;
-        	top: 0;
-        	left: 50%;
-        	width: 66px;
-        	height: 66px;
-        	border-radius: 2px;
-        	margin-left: -33px;
-        	margin-top: -30px;
-		}
-		.shop {
-			flex: 1;
-			width: 70%;
-			margin: 5px 10px;
-			text-align: center;
-			.shop-title {
-				line-height: 24px;
-				position:relative;
-				.shop-logo {
-					position: absolute;
-					width: 26px;
-					height:18px;
-					left: 58px;
-					top: 5px;
-					font-size: 10px;
-                    padding: 0px 3px;
-                    background-color:gold;
-					border-radius: 10%;
-					text-align: center;
-					line-height: 21px;
-				}
-				.shop-name {
-					font-size: 20px;
-					&:after {
-					@include arrow(8px, #545454);
-					content: '';
-					position: absolute;
-					top: 7px;
-					right: 60px;
-				}
-				}
-			}
-			.shop-message {
-				color: #333;
-				font-size: 12px;
-				margin-top: 5px;
-				.shop-message-detail {
-					margin-right: 8px;
-				}
-			}
-		}
-	}
+    }
   }
-	//购物车   
-  .buyCar {
-    z-index: 100;
-    background-color: #141d27;
-    height: 50px;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-  }
+}
+
+// 购物车
+.buyCar {
+  z-index: 90;
+  background-color: #141d27;
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 </style>
 
 <script type="text/javascript">
+import DetailHeader from "../components/DetailHeader";
+import ShopList from "../components/ShopList";
 // 组件
 export default {
+  // 注册组件
+  components: { DetailHeader, ShopList },
   // 数据
   data() {
     return {
       list: {},
-      data: {}
+      data: {},
+      show: true
     };
   },
   methods: {
-	 toggleShopShow() {
-
-	 },
     // 获取数据方法
     getData() {
       let { params } = this.$route;
@@ -146,7 +95,7 @@ export default {
         this.data = data.goods;
         // console.log(this.list)
       });
-    }
+    },
   },
   // 组件创建完成
   created() {
