@@ -95,7 +95,7 @@ export default {
         this.data = data.goods;
         // console.log(this.list)
       });
-    },
+    }
   },
   // 组件创建完成
   created() {

@@ -11,7 +11,7 @@
             :class="{current: index===currentIndex}"
             @click="clickMenuItem(index)"
           >
-            <span class="text bottom-border-1px">
+            <span class="text">
               <img class="icon" :src="item.icon" v-if="item.icon" />
               {{item.name}}
             </span>
@@ -25,13 +25,13 @@
             <h1 class="title">{{item.name}}</h1>
             <ul>
               <li
-                class="food-item bottom-border-1px"
+                class="food-item"
                 v-for="(food, index) in item.foods"
                 :key="index"
                 @click="showFood(food)"
               >
                 <div class="icon">
-                  <img width="57" height="57" :src="food.icon" />
+                  <img :src="food.icon" />
                 </div>
                 <div class="content">
                   <h2 class="name">{{food.name}}</h2>
@@ -102,25 +102,176 @@
       }
     }
   }
+  .foods {
+    flex: 1;
+    .title {
+      padding-left: 14px;
+      height: 26px;
+      line-height: 26px;
+      border-left: 2px solid #d9dde1;
+      font-size: 12px;
+      color: rgb(147, 153, 159);
+      background: #f3f5f7;
+    }
+    .food-item {
+      display: flex;
+      margin: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+      &:last-child {
+        border: none;
+        margin-bottom: 0;
+      }
+      .icon {
+        flex: 0 0 57px;
+        margin-right: 10px;
+        img {
+          width: 57px;
+          height: 57px;
+        }
+      }
+      .content {
+        flex: 1;
+        .name {
+          margin: 2px 0 8px 0;
+          height: 14px;
+          line-height: 14px;
+          font-size: 14px;
+          color: rgb(7, 17, 27);
+        }
+        .desc,
+        .extra {
+          line-height: 10px;
+          font-size: 10px;
+          color: rgb(147, 153, 159);
+        }
+        .desc {
+          line-height: 12px;
+          margin-bottom: 8px;
+        }
+        .extra {
+          .count {
+            margin-right: 12px;
+          }
+        }
+        .price {
+          font-weight: 700;
+          line-height: 24px;
+          .now {
+            margin-right: 8px;
+            font-size: 14px;
+            color: rgb(240, 20, 20);
+          }
+          .old {
+            text-decoration: line-through;
+            font-size: 10px;
+            color: rgb(147, 153, 159);
+          }
+        }
+      }
+    }
+  }
 }
 </style>
 
 <script type="text/javascript">
+import BScroll from "better-scroll";
 // 组件
 export default {
   // 接收数据
   props: ["goods"],
+  data() {
+    return {
+      // 右侧滑动的Y轴坐标
+      scrollY: 0,
+      // 所有右侧分类li的top组成的数组
+      tops: [],
+      // 根据筛选需要显示的食物
+      food: {}
+    };
+  },
+  mounted() {
+    this.$store.dispatch("getShopGoods", () => {
+      // 数据更新后执行
+      this.$nextTick(() => {
+        // 列表数据更新显示后执行
+        this._initScroll();
+        this._initTops();
+      });
+    });
+  },
   computed: {
     // 计算得到当前分类的下标
-    currentIndex(index) {
+    currentIndex() {
+      // 解构数据
+      let { scrollY, tops } = this;
+      // 根据条件计算产生一个结果
+      let index = tops.findIndex((top, index) => {
+        // scrollY>=当前top && scrollY<下一个top
+        return scrollY >= top && scrollY < tops[index + 1];
+      });
+      // 返回结果
       return index;
     }
   },
-  // 点击方法
+  // 方法
   methods: {
+    // 初始化滚动
+    _initScroll() {
+      // 列表显示之后创建
+      new BScroll(".menu", {
+        click: true
+      });
+      this.foodsScroll = new BScroll(".foods", {
+        probeType: 1,
+        // 因为惯性滑动不会触发
+        click: true
+      });
+
+      // 给右侧列表绑定scroll监听
+      this.foodsScroll.on("scroll", ({ x, y }) => {
+        console.log(x, y);
+        this.scrollY = Math.abs(y);
+      });
+      // 给右侧列表绑定scroll结束的监听
+      this.foodsScroll.on("scrollEnd", ({ x, y }) => {
+        console.log("scrollEnd", x, y);
+        this.scrollY = Math.abs(y);
+      });
+    },
+    // 初始化tops
+    _initTops() {
+      // 初始化tops
+      let tops = [];
+      let top = 0;
+      tops.push(top);
+      // 找到所有分类的li
+      let lis = this.$refs.foodsUl.getElementsByClassName("food-list-hook");
+      Array.prototype.slice.call(lis).forEach(li => {
+        top += li.clientHeight;
+        tops.push(top);
+      });
+      // 更新数据
+      this.tops = tops;
+      console.log(tops)
+    },
+
     // 点击menu显示显示相关商品，切换位置
-    clickMenuItem() {},
-    showFood() {}
+    clickMenuItem(index) {
+      console.log(index);
+      // 使用右侧列表滑动到对应的位置
+      let scrollY = this.tops[index];
+      // 立即更新scrollY(让点击的分类项成为当前分类)
+      this.scrollY = scrollY;
+      // 滑动右侧列表
+      this.foodsScroll.scrollTo(0, -scrollY, 300);
+    },
+    showFood(food) {
+      // 设置food
+      this.food = food;
+      // 显示food组件 (在父组件中调用子组件对象的方法)
+      this.$refs.food.toggleShow();
+    }
   }
 };
 </script>
