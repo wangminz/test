@@ -1,4 +1,5 @@
 <template>
+<!-- 商品列表 -->
   <div>
     <div class="goods">
       <!-- 左侧菜单栏 -->
@@ -44,12 +45,18 @@
                     <span class="now">￥{{food.price}}</span>
                     <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
+                  <!-- 加号 -->
+                  <div id="add">
+                    <Add :food="food"></Add>
+                  </div>
                 </div>
               </li>
             </ul>
           </li>
         </ul>
       </div>
+      <!-- 购物车 -->
+      <shoppingCar></shoppingCar>
     </div>
   </div>
 </template>
@@ -62,6 +69,7 @@
   width: 100%;
   background-color: #fff;
   overflow: hidden;
+  // 侧边栏
   .menu {
     flex: 0 0 80px;
     width: 80px;
@@ -102,6 +110,7 @@
       }
     }
   }
+  // 右侧食物
   .foods {
     flex: 1;
     .title {
@@ -131,6 +140,7 @@
         }
       }
       .content {
+        position: relative;
         flex: 1;
         .name {
           margin: 2px 0 8px 0;
@@ -168,6 +178,11 @@
             color: rgb(147, 153, 159);
           }
         }
+        #add {
+          position: absolute;
+          right: 0;
+          bottom: 8px;
+        }
       }
     }
   }
@@ -176,8 +191,13 @@
 
 <script type="text/javascript">
 import BScroll from "better-scroll";
+// 引入组件
+import Add from "./Add";
+import shoppingCar from "./shoppingCar";
 // 组件
 export default {
+  // 注册组件
+  components: { Add, shoppingCar },
   // 接收数据
   props: ["goods"],
   data() {
@@ -253,7 +273,7 @@ export default {
       });
       // 更新数据
       this.tops = tops;
-      console.log(tops)
+      //   console.log(tops);
     },
 
     // 点击menu显示显示相关商品，切换位置
@@ -269,8 +289,9 @@ export default {
     showFood(food) {
       // 设置food
       this.food = food;
+    //   console.log(this.food.name)
       // 显示food组件 (在父组件中调用子组件对象的方法)
-      this.$refs.food.toggleShow();
+      // this.$refs.food.toggleShow();
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
 <!-- footer部分 -->
-  <div class="footer">
+  <div class="footer" v-show="$route.meta.show">
     <a :class="{on: '/home'===$route.path}" @click="goTo('/home')">
       <span>外卖</span>
     </a>
@@ -46,6 +46,11 @@
 
 <script>
   export default {
+    data() {
+      return {
+        show: true
+      }
+    },
     methods: {
       // 页面切换
       goTo (path) {

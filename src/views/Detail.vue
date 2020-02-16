@@ -15,12 +15,14 @@
         <p>商家</p>
       </div>
     </div>
-    <ShopList :goods="data" v-show="show"></ShopList>
     <!-- 商品列表 -->
+    <ShopList :goods="data" v-show="show"></ShopList>
+    <!-- 评价列表 -->
+    <!-- 商家信息列表 -->
     <!-- 购物车部分 -->
-    <div class="buyCar">
+    <!-- <div class="buyCar">
       <h1>另需配送费</h1>
-    </div>
+    </div> -->
   </div>
 </template>
 
