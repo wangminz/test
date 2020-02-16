@@ -1,5 +1,5 @@
 <template>
-<!-- 商品列表 -->
+  <!-- 商品列表 -->
   <div>
     <div class="goods">
       <!-- 左侧菜单栏 -->
@@ -58,6 +58,8 @@
       <!-- 购物车 -->
       <shoppingCar></shoppingCar>
     </div>
+    <!-- 食物卡片 -->
+    <Food :food="food" ref="food" />
   </div>
 </template>
 <style type="text/css" lang="scss">
@@ -193,11 +195,12 @@
 import BScroll from "better-scroll";
 // 引入组件
 import Add from "./Add";
+import Food from "./Food";
 import shoppingCar from "./shoppingCar";
 // 组件
 export default {
   // 注册组件
-  components: { Add, shoppingCar },
+  components: { Add, shoppingCar, Food },
   // 接收数据
   props: ["goods"],
   data() {
@@ -289,9 +292,9 @@ export default {
     showFood(food) {
       // 设置food
       this.food = food;
-    //   console.log(this.food.name)
+      // console.log(this.food.name)
       // 显示food组件 (在父组件中调用子组件对象的方法)
-      // this.$refs.food.toggleShow();
+      this.$refs.food.toggleShow();
     }
   }
 };
