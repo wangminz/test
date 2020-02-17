@@ -56,7 +56,7 @@
         </ul>
       </div>
       <!-- 购物车 -->
-      <shoppingCar></shoppingCar>
+      <ShoppingCar></ShoppingCar>
     </div>
     <!-- 食物卡片 -->
     <Food :food="food" ref="food" />
@@ -196,11 +196,11 @@ import BScroll from "better-scroll";
 // 引入组件
 import Add from "./Add";
 import Food from "./Food";
-import shoppingCar from "./shoppingCar";
+import ShoppingCar from "./ShoppingCar";
 // 组件
 export default {
   // 注册组件
-  components: { Add, shoppingCar, Food },
+  components: { Add, ShoppingCar, Food },
   // 接收数据
   props: ["goods"],
   data() {
