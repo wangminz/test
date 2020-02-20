@@ -4,7 +4,7 @@
      <div class="top">
        <img class="image" src="/img/my.png" alt="">
        <ul>
-         <li class="login">登录/注册</li>
+         <router-link tag="li" to="/login" class="login">登录/注册</router-link>
          <li class="number"><img src="/img/phone.png" alt=""><p>暂无绑定手机号</p></li>
        </ul>
        <span class="left">></span>
